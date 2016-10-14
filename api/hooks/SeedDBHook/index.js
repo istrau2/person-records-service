@@ -4,6 +4,7 @@
 
 const fs = require('fs');
 const path = require('path');
+const readline = require('readline');
 const moment = require('moment');
 const Promise = require('bluebird');
 const dataDirPath = path.resolve( __dirname, '../../../data');
@@ -48,27 +49,37 @@ module.exports = function(sails) {
         getJsonRecordsFromFile(fileName) {
             const _this = this;
             return new Promise((resolve, reject) => {
-                fs.readFile(dataDirPath + '/' + fileName, (err, contents) => {
-                    if (err) {
-                        reject(err);
-                        return;
-                    }
-                    return _this.parseFileContents(contents);
+                const records = [];
+                const lineReader = readline.createInterface({
+                    input: fs.createReadStream(dataDirPath + '/' + fileName)
+                });
+
+                lineReader.on('line', function (line) {
+                    records.push(_this.getRecordFromLine(line))
+                });
+
+                lineReader.on('close', function (line) {
+                    resolve(records);
                 });
             });
         },
-        parseFileContents(contents) {
-            return contents.split('\n')
-                .map(lineContent => this.getRecordFromLineContent);
-        },
-        getRecordFromLineContent(lineContent) {
-            const splitLineContent = lineContent.split(/[\s\|\s,\,\s,\s]/g);
+        getRecordFromLine(line) {
+            let delimiter = ' ';
+
+            if (line.indexOf('|') > -1) {
+                delimiter = ' | ';
+            }
+            else if (line.indexOf(',') > -1) {
+                delimiter = ', ';
+            }
+
+            const splitLine = line.split(delimiter);
             return {
-                firstName: splitLineContent[0],
-                lastName: splitLineContent[1],
-                gender: splitLineContent[2],
-                favoriteColor: splitLineContent[3],
-                dateOfBirth: moment(splitLineContent[4]).toDate()
+                firstName: splitLine[0],
+                lastName: splitLine[1],
+                gender: splitLine[2],
+                favoriteColor: splitLine[3],
+                dateOfBirth: moment(splitLine[4]).toDate()
             };
         },
         createDBPersonsFromJsonRecords(records) {
