@@ -17,6 +17,10 @@ class DBSeederService {
         this.recordService = recordService;
     }
 
+    /**
+     * Initiates the seeding of th db using files contained in /data
+     * @returns {Promise}
+     */
     seed() {
         return this.getDataFileNames()
             .then(fileNames => {
@@ -33,6 +37,10 @@ class DBSeederService {
             });
     }
 
+    /**
+     * Gets all fileNames in /data
+     * @returns {Promise.<Array[string]>}
+     */
     getDataFileNames() {
         return new Promise((resolve, reject) => {
             fs.readdir(dataDirPath, (err, files) => {
@@ -45,6 +53,11 @@ class DBSeederService {
         });
     }
 
+    /**
+     * Gets all lines in the files specified.
+     * @param fileNames Array[string]
+     * @returns {Promise.<Array[string]>}
+     */
     getLinesFromFiles(fileNames) {
         return Promise.all(fileNames.map(fileName => this.getLinesFromFile(fileName)))
             .then(linesArrays => {
@@ -54,6 +67,11 @@ class DBSeederService {
             });
     }
 
+    /**
+     * Gets all lines from a single file.
+     * @param fileName string
+     * @returns {Promise.<Array[string]>}
+     */
     getLinesFromFile(fileName) {
         const _this = this;
         return new Promise((resolve, reject) => {

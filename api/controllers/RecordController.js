@@ -12,6 +12,13 @@ class RecordController {
         this.recordService = recordService;
     }
 
+    /**
+     * Adds a record using body.line
+     * @param req
+     * @param res
+     * @param next
+     * @returns {Record}
+     */
     post(req, res, next) {
         const line = req.body.line;
 
@@ -24,18 +31,39 @@ class RecordController {
             .catch(err => res.serverError(err));
     }
 
+    /**
+     * Gets a list of all the records ordered ascending by gender
+     * @param req
+     * @param res
+     * @param next
+     * @returns {Promise.<Array[Record]>}
+     */
     getSortedByGender(req, res, next) {
         return this.recordService.getOrderedList('gender')
             .then(records => res.ok(records))
             .catch(err => res.serverError(err));
     }
 
+    /**
+     * Gets a list of all the records ordered ascending by dateOfBirth
+     * @param req
+     * @param res
+     * @param next
+     * @returns {Promise.<Array[Record]>}
+     */
     getSortedByDateOfBirth(req, res, next) {
         return this.recordService.getOrderedList('dateOfBirth')
             .then(records => res.ok(records))
             .catch(err => res.serverError(err));
     }
 
+    /**
+     * Gets a list of all the records ordered descending by lastName
+     * @param req
+     * @param res
+     * @param next
+     * @returns {Promise.<Array[Record]>}
+     */
     getSortedByName(req, res, next) {
         return this.recordService.getOrderedList('lastName', 'DESC')
             .then(records => res.ok(records))

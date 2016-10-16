@@ -3,6 +3,12 @@
  */
 
 class ModelsService {
+
+    /**
+     * Obtains the model corresponding to modelName
+     * @param modelName string
+     * @returns {Object}
+     */
     get(modelName) {
         const model =  sails.models[modelName.toLowerCase()];
 

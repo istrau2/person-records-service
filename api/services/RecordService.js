@@ -13,6 +13,12 @@ class RecordService {
         this.modelsService = modelsService;
     }
 
+    /**
+     * Returns a list of all records sorted by orderBy in the direction specified
+     * @param orderBy string
+     * @param direction [string = 'ASC']
+     * @returns {Promise.<Array[Record]>}
+     */
     getOrderedList(orderBy, direction = 'ASC') {
         return new Promise((resolve, reject) => {
             this.modelsService.get('Record').find({
@@ -27,6 +33,11 @@ class RecordService {
         });
     }
 
+    /**
+     * Adds records to the db by parsing lines (one for each line).
+     * @param lines Array[string]
+     * @returns {Promise.<Array[Record]>}
+     */
     createDBRecordsFromLines(lines) {
         const jsonRecords = lines.map(line => this._getRecordJsonFromLine(line));
 
@@ -41,6 +52,12 @@ class RecordService {
         });
     }
 
+    /**
+     * Parses a line and returns a json representation of the record defined by the line
+     * @param line string
+     * @returns {{firstName: string, lastName: string, gender: string, favoriteColor: string, dateOfBirth: Date}}
+     * @private
+     */
     _getRecordJsonFromLine(line) {
         let delimiter = ' ';
 
