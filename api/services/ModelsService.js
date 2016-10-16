@@ -10,6 +10,10 @@ class ModelsService {
      * @returns {Object}
      */
     get(modelName) {
+        if (typeof modelName !== 'string') {
+            throw new Error('modelName must be of type string.');
+        }
+
         const model =  sails.models[modelName.toLowerCase()];
 
         if (!model) {
