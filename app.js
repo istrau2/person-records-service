@@ -60,6 +60,8 @@ require('aurelia-polyfills');
     const rootContainer = new di.Container();
     rootContainer.makeGlobal();
 
+    console.log('Container is global');
+
     // Start server
     sails.lift(rc('sails'));
 })();

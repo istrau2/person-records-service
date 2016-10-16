@@ -4,6 +4,11 @@
 
 module.exports = {
     attributes: {
+        id: {
+            type: 'integer',
+            primaryKey: true,
+            autoIncrement: true
+        },
         firstName: {
             type: 'string'
         },
